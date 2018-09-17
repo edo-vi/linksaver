@@ -11,10 +11,10 @@ validOptions :: [String]
 validOptions = ["d", "D", "u", "rm", "l"]
 
 isValidOption :: Option -> Bool
-isValidOption x = elem (option x) validOptions
+isValidOption x = (option x) `elem` validOptions
 
 isValidString :: String -> Bool
-isValidString s = elem s validOptions
+isValidString s = s `elem` validOptions
 
 parse :: String -> [Option]
 parse s = let y  = words s
@@ -23,18 +23,33 @@ parse s = let y  = words s
               getO [_]    = []
               getO [_,""] = []
               getO ["",_] = []
-              getO (x:y:xs) = case first == '-' && isValidString second of
+              getO (x:w:xs) = case first == '-' && isValidString second of
                                 True  -> [Option {
-                                    option = second, value = y
+                                    option = second, value = w
                                     }] ++ getO xs
-                                False -> [] ++ getO (y:xs)
-                                where first = x !! 0
+                                False -> getO (w:xs)
+                                where first = head x
                                       second = tail x
           in getO y
 
+cleanOption :: String -> String
+cleanOption [] = []
+cleanOption t@(x:xs) = if x=='-' then xs else t
+
 existsOption :: String -> Command -> Bool
-existsOption s (Command c) 
-  | s !! 0 == '-' = elem (tail s) (map (\x -> option x) c)
-  | otherwise = elem s (map (\x -> option x) c)
-                              
-teststring = "-D mtg -d cute -u edo"
+existsOption s (Command c)  = elem cleans (map (\x -> option x) c)
+                              where cleans = cleanOption s
+
+getOption :: String -> Command -> Maybe Option
+getOption [] _ = Nothing
+getOption s c 
+  | existsOption s c == True = Just $ head (filter (\x -> option x == cleans) list)
+  | otherwise                = Nothing 
+  where list = (\(Command w) -> w) c
+        cleans = cleanOption s
+
+teststring = "-D mtg -d cute -u edo -w whatever"
+
+test = parse teststring
+
+command = Command (parse teststring)
