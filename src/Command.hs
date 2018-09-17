@@ -31,3 +31,10 @@ parse s = let y  = words s
                                 where first = x !! 0
                                       second = tail x
           in getO y
+
+existsOption :: String -> Command -> Bool
+existsOption s (Command c) 
+  | s !! 0 == '-' = elem (tail s) (map (\x -> option x) c)
+  | otherwise = elem s (map (\x -> option x) c)
+                              
+teststring = "-D mtg -d cute -u edo"
