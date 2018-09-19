@@ -1,4 +1,3 @@
-module Spec where
 
 import Lib
 import Test.Hspec
