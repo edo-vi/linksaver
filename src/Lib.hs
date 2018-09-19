@@ -1,4 +1,4 @@
-module Command(Command, Option) where
+module Lib where
 
 data Option = Option { option :: String
                      , value :: String
@@ -23,7 +23,7 @@ parse s = let y  = words s
               getO [_]    = []
               getO [_,""] = []
               getO ["",_] = []
-              getO (x:w:xs) = case first == '-' && isValidString second of
+              getO (x:w:xs) = case first == '-' && isValidString second && head w /= '-' of
                                 True  -> [Option {
                                     option = second, value = w
                                     }] ++ getO xs
