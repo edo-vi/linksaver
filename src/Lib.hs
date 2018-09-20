@@ -5,7 +5,7 @@ module Lib where
 type Input = String
 
 -- | Possible state of the deterministic Parser finite automata.
-data ParserState = WaitingOption | WaitingValue | End deriving (Eq, Show)
+data ParserState = WaitingOption | WaitingValue deriving (Eq, Show)
 
 -- | Product data type representing a parser taking a string as input. 
 -- It is implemented as a finite automata so
@@ -29,7 +29,6 @@ transition ('-':xs) (Parser WaitingOption)
   | otherwise = Parser WaitingOption
 transition _ (Parser WaitingValue) = Parser WaitingOption
 transition _ (Parser WaitingOption) = Parser WaitingOption
--- TODO adds remaining matches
 
 validOptions :: [String]
 validOptions = ["d", "D", "u", "rm", "l"]
