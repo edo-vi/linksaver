@@ -1,16 +1,36 @@
 
 module Lib where
 
+import Data.Maybe
 
 type Input = String
 
--- | Possible state of the deterministic Parser finite automata.
-data ParserState = WaitingOption | WaitingValue deriving (Eq, Show)
+-- | Tree structure.
+data Tree a = Leaf | Node (Tree a) a (Tree a) deriving (Eq, Show)
 
--- | Product data type representing a parser taking a string as input. 
--- It is implemented as a finite automata so
---it also contains information about its current state.
-data Parser = Parser ParserState deriving (Eq, Show)
+-- | Parses the given string and creates a Tree whose right nodes are commands and 
+-- left nodes are their values
+parseToTree :: String -> Tree (Maybe String)
+parseToTree s = let ws = words s
+                    parTr :: [String] -> Tree (Maybe String) 
+                    parTr [] = Leaf
+                    parTr ([]:_) = Leaf
+                    parTr [('-':xs)] = Node (Node Leaf Nothing Leaf) (Just xs) Leaf
+                    parTr (('-':xs):n@('-':_):rest) 
+                      | isValidString xs = Node (Node Leaf Nothing Leaf) (Just xs) (parTr (n:rest))
+                      | otherwise = parTr (n:rest)
+                    parTr (('-':xs):y:rest)
+                      | isValidString xs = Node (Node Leaf (Just y) Leaf) (Just xs) (parTr rest) 
+                      | otherwise = parTr (y:rest)
+                    parTr (_:rest) = parTr rest -- this case only when we get two or more consecutive values,
+                                                -- which are not valid
+                in parTr ws
+
+-- | Parses a Tree of Just String to an array of options
+parseTreeToOptions :: Tree (Maybe String) -> [Option]
+parseTreeToOptions Leaf = []
+parseTreeToOptions (Node Leaf _ _) = []
+parseTreeToOptions (Node (Node _ val _) val' r') = Option (fromJust val') val : parseTreeToOptions r'
 
 -- | Option that can be parsed and used to construct a command. Contains two field:
 -- /option/, which is the string symbol used as identifier, and its /value/, another string
@@ -23,15 +43,15 @@ data Option = Option { option :: String
 -- | A command constructed by Options.
 newtype Command = Command [Option] deriving (Eq, Show) 
 
-transition :: String -> Parser -> Parser
-transition ('-':xs) (Parser WaitingOption)
-  | isValidString xs = Parser WaitingValue
-  | otherwise = Parser WaitingOption
-transition _ (Parser WaitingValue) = Parser WaitingOption
-transition _ (Parser WaitingOption) = Parser WaitingOption
-
+-- | List of all valid options.
 validOptions :: [String]
 validOptions = ["d", "D", "u", "rm", "l"]
+
+
+createOption :: String -> String -> Option
+createOption s a
+  | a /= "" = Option s (Just a)
+  | otherwise = Option s Nothing
 
 isValidOption :: Option -> Bool
 isValidOption x = option x `elem` validOptions
@@ -40,20 +60,7 @@ isValidString :: String -> Bool
 isValidString s = s `elem` validOptions
 
 parse :: String -> [Option]
-parse s = let y  = words s
-              getO :: [String] -> [Option]
-              getO []     = []
-              getO [_]    = []
-              getO [_,""] = []
-              getO ["",_] = []
-              getO (x:w:xs) = case first == '-' && isValidString second && head w /= '-' of
-                                True  -> [Option {
-                                    option = second, value = Just w
-                                    }] ++ getO xs
-                                False -> getO (w:xs)
-                                where first = head x
-                                      second = tail x
-          in getO y
+parse = parseTreeToOptions . parseToTree
 
 cleanOption :: String -> String
 cleanOption [] = []
