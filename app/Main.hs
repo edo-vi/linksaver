@@ -1,6 +1,6 @@
 module Main where
-import Lib
+import Command
 
 -- | Haddock test
 main :: IO ()
-main = putStrLn "Hello, Haskell!"
+main = print $ parse "-d Hello, Haskell!"
