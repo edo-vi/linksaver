@@ -54,6 +54,7 @@ isValidOption x = option x `elem` validOptions
 isValidString :: String -> Bool
 isValidString s = s `elem` validOptions
 
+
 parse :: String -> [Option]
 parse = parseTreeToOptions . parseToTree
 
@@ -61,20 +62,14 @@ cleanOption :: String -> String
 cleanOption [] = []
 cleanOption t@(x:xs) = if x=='-' then xs else t
 
-existsOption :: String -> Command -> Bool
-existsOption s (Command c)  = elem cleans (map (\x -> option x) c)
-                              where cleans = cleanOption s
+existsOption :: String -> [Option] -> Bool
+existsOption s c = cleans `elem` optArr
+                   where cleans = cleanOption s
+                         optArr = map option c
 
-getOption :: String -> Command -> Maybe Option
+getOption :: String -> [Option] -> Maybe Option
 getOption [] _ = Nothing
 getOption s c 
-  | existsOption s c == True = Just $ head (filter (\x -> option x == cleans) list)
+  | existsOption s c = Just $ head (filter (\x -> option x == cleans) c)
   | otherwise                = Nothing 
-  where list = (\(Command w) -> w) c
-        cleans = cleanOption s
-
-teststring = "-D mtg -d cute -u edo -w whatever"
-
-test = parse teststring
-
-command = Command (parse teststring)
+  where cleans = cleanOption s
