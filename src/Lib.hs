@@ -48,11 +48,6 @@ validOptions :: [String]
 validOptions = ["d", "D", "u", "rm", "l"]
 
 
-createOption :: String -> String -> Option
-createOption s a
-  | a /= "" = Option s (Just a)
-  | otherwise = Option s Nothing
-
 isValidOption :: Option -> Bool
 isValidOption x = option x `elem` validOptions
 
