@@ -1,6 +1,9 @@
 module Main where
 import Command
+import System.Environment (getArgs)
 
--- | Haddock test
+
 main :: IO ()
-main = print $ parse "-d Hello, Haskell!"
+main = do
+    cont <- getArgs
+    print $ parseList cont

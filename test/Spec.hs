@@ -1,5 +1,6 @@
 
 import Lib
+import Command
 import Test.Hspec
 
 main = hspec $ do
@@ -12,6 +13,9 @@ main = hspec $ do
           (parse "-n -D mtg") `shouldBe` [Option "D" (Just "mtg")]
           (parse "-n cc -D mtg") `shouldBe` [Option "D" (Just "mtg")]
           (parse "") `shouldBe` []
+          (parse "-rd") `shouldBe` []
+          (parse "-l -d") `shouldBe` [Option "l"  Nothing, Option "d" Nothing]
+          (parse "-rd ciao tse -l -dr") `shouldBe` [Option "l" Nothing]
     describe "Can get options" $ do
         it "Check correctly if options exists and can get them from a command" $ do
             let com1 = parse "-D mtg -d cute -u edo -w whatever -l"

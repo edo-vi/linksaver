@@ -12,7 +12,9 @@ parseToTree s = let ws = words s
                     parTr :: [String] -> Tree (Maybe String) 
                     parTr [] = Leaf
                     parTr ([]:_) = Leaf
-                    parTr [('-':xs)] = Node (Node Leaf Nothing Leaf) (Just xs) Leaf
+                    parTr [('-':xs)]
+                        | isValidString xs = Node (Node Leaf Nothing Leaf) (Just xs) Leaf
+                        | otherwise = Leaf
                     parTr (('-':xs):n@('-':_):rest) 
                       | isValidString xs = Node (Node Leaf Nothing Leaf) (Just xs) (parTr (n:rest))
                       | otherwise = parTr (n:rest)
@@ -55,6 +57,10 @@ isValidString s = s `elem` validOptions
 -- | Parses a string to an array of Option.
 parse :: String -> [Option]
 parse = parseTreeToOptions . parseToTree
+
+-- | Same as parse but receives a list of string as input.
+parseList :: [String] -> [Option]
+parseList = parse . unwords
 
 -- | Cleans an option identifier by removing its initial character '-'.
 cleanOption :: String -> String
