@@ -12,19 +12,21 @@ firstWhiteSpace :: String -> [String]
 firstWhiteSpace [] = []
 firstWhiteSpace st = [takeWhile (/= ' ') st, dropWhile (/= ' ') st]
 
-removeFirstWhite :: String -> String
-removeFirstWhite [] = []
-removeFirstWhite s = dropWhile (==' ') s
+trim :: String -> String
+trim = removeInitWhites . removeTrailingWhites
 
-removeLastWhite :: String -> String
-removeLastWhite [] = []
-removeLastWhite s
-  | last s == ' ' = init s
-  | otherwise = s
+removeInitWhites :: String -> String
+removeInitWhites [] = []
+removeInitWhites s = dropWhile (== ' ') s
+
+removeTrailingWhites :: String -> String
+removeTrailingWhites [] = []
+removeTrailingWhites s = reverse . removeInitWhites . reverse $ s
 
 nonEmpty :: String -> Bool
 nonEmpty [] = False
 nonEmpty str = foldr ((||) . (/=' ')) False str
 
 customWords :: String -> [String]
-customWords z = fmap removeFirstWhite $ fmap removeLastWhite $ filter (\x -> x/= "" && nonEmpty x == True) $ concat $ fmap firstWhiteSpace $  charWords '-' z
+customWords z = fmap trim $ filter (\x -> x/= "" && nonEmpty x == True) 
+                $ concat $ fmap firstWhiteSpace $  charWords '-' z
