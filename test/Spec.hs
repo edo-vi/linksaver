@@ -9,14 +9,15 @@ main = hspec $ do
     describe "Parsing" $ do
         it "Parses commands correctly" $ do
           (parse "-D mtg -d cute -u edo -w whatever") `shouldBe` [Option "D" (Just "mtg"), Option "d" (Just "cute"), Option "u" (Just "edo")]
-          (parse "-D mtg -d cute -r --t -u edo -w whatever") `shouldBe` [Option "D" (Just "mtg"), Option "d" (Just "cute"), Option "u" (Just "edo")]
+          (parse "-D mtg -d cute -q --z -u edo -w whatever") `shouldBe` [Option "D" (Just "mtg"), Option "d" (Just "cute"), Option "u" (Just "edo")]
           (parse "-D") `shouldBe` [Option "D" Nothing]
           (parse "-D -d cute") `shouldBe` [Option "D" Nothing, Option "d" (Just "cute")]
           (parse "-n -D mtg") `shouldBe` [Option "D" (Just "mtg")]
           (parse "-n cc -D mtg") `shouldBe` [Option "D" (Just "mtg")]
           (parse "") `shouldBe` []
           (parse "-rd") `shouldBe` []
-          (parse "-l -d") `shouldBe` [Option "l"  Nothing, Option "d" Nothing]
+          (parse "-l -d ciao come va") `shouldBe` [Option "l"  Nothing, Option "d" (Just "ciao come va")]
+          (parse "--l -d") `shouldBe` [Option "l"  Nothing, Option "d" Nothing]
           (parse "-rd ciao tse -l -dr") `shouldBe` [Option "l" Nothing]
         it "Check correctly if options exists and can get them from a command" $ do
           let com1 = parse "-D mtg -d cute -u edo -w whatever -l"

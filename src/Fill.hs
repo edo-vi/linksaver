@@ -22,4 +22,3 @@ fillDefaults l (Command list) = let
                                     | otherwise = s : fill o ss  
                               in Command (list ++ fill list l)
 
-testCommand = Command [Option "D" (Just "non-mtg"), Option "rm" Nothing]

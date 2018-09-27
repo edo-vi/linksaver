@@ -1,14 +1,16 @@
 module Command where
 
 import Data.Maybe
+import CustomWords(customWords)
 
 -- | Tree structure.
 data Tree a = Leaf | Node (Tree a) a (Tree a) deriving (Eq, Show)
 
+
 -- | Parses the given string and creates a Tree whose right nodes are commands and 
 -- left nodes are their values.
 parseToTree :: String -> Tree (Maybe String)
-parseToTree s = let ws = words s
+parseToTree s = let ws = customWords s
                     parTr :: [String] -> Tree (Maybe String) 
                     parTr [] = Leaf
                     parTr ([]:_) = Leaf
@@ -43,8 +45,9 @@ data Option = Option { option :: String
 newtype Command = Command [Option] deriving (Eq, Show) 
 
 -- | List of all valid options identifiers.
+-- /D/: database, /t/ : table, /u/: user, /l/: link, /rm/: remove, /s/: save, /r/:read
 validOptions :: [String]
-validOptions = ["d", "D", "u", "rm", "l", "t"]
+validOptions = ["d", "D", "u", "rm", "l", "t", "s", "r"]
 
 -- | Returns True if the option identifier is valid; 
 isValidOption :: Option -> Bool
