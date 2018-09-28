@@ -18,6 +18,7 @@ main = hspec $ do
           (parse "-rd") `shouldBe` []
           (parse "-l -d ciao come va") `shouldBe` [Option "l"  Nothing, Option "d" (Just "ciao come va")]
           (parse "--l -d") `shouldBe` [Option "l"  Nothing, Option "d" Nothing]
+          (parse "-s -d Descrizione del link") `shouldBe` [Option "s" Nothing, Option "d" (Just "Descrizione del link")]
           (parse "-rd ciao tse -l -dr") `shouldBe` [Option "l" Nothing]
         it "Check correctly if options exists and can get them from a command" $ do
           let com1 = parse "-D mtg -d cute -u edo -w whatever -l"
