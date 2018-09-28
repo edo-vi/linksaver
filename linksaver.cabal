@@ -26,14 +26,16 @@ source-repository head
 
 library
   exposed-modules:
-      Lib, Command, Fill, CustomWords
+      Lib, Command, Fill, CustomWords, Builder
   other-modules:
       Paths_linksaver
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5,
-      split >= 0.2
+      split >= 0.2,
+      Hclip,
+      postgresql-simple
   default-language: Haskell2010
 
 executable linksaver-exe
@@ -46,6 +48,7 @@ executable linksaver-exe
   build-depends:
       base >=4.7 && <5
     , linksaver
+    , Hclip
   default-language: Haskell2010
 
 test-suite linksaver-test

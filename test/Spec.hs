@@ -48,15 +48,15 @@ main = hspec $ do
             defaultTable = Option "t" (Just "creatures")
             defaults = [defaultDatabase, defaultUsername, defaultTable]
             nondefaults = []
-        fillDefaults defaults com1 `shouldBe` Command [Option "D" (Just "mtg"), 
+        fillDefaultsCommand defaults com1 `shouldBe` Command [Option "D" (Just "mtg"), 
             Option "d" (Just "cute"), Option "u" (Just "edo"), Option "l" Nothing, defaultTable]
-        fillDefaults defaults com2 `shouldBe` Command defaults
-        fillDefaults defaults com3 `shouldBe` com3
-        fillDefaults defaults com4 `shouldBe` Command [Option "d" (Just "nondefault"), 
+        fillDefaultsCommand defaults com2 `shouldBe` Command defaults
+        fillDefaultsCommand defaults com3 `shouldBe` com3
+        fillDefaultsCommand defaults com4 `shouldBe` Command [Option "d" (Just "nondefault"), 
             Option "t" (Just "nondefault"), Option "u" (Just "nondefault"),defaultDatabase ]
-        fillDefaults nondefaults com1 `shouldBe` com1
-        fillDefaults nondefaults com2 `shouldBe` com2
-        fillDefaults nondefaults com3 `shouldBe` com3
+        fillDefaultsCommand nondefaults com1 `shouldBe` com1
+        fillDefaultsCommand nondefaults com2 `shouldBe` com2
+        fillDefaultsCommand nondefaults com3 `shouldBe` com3
 
 
 

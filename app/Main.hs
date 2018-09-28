@@ -1,9 +1,12 @@
 module Main where
 import Command
 import System.Environment (getArgs)
-
+import System.Hclip(getClipboard)
+import Fill(defaultOptions)
+import Builder(buildCommand)
 
 main :: IO ()
 main = do
-    cont <- getArgs
-    print $ parseList cont
+    getArgs >>= -- IO [string] containing the options
+        (\options -> getClipboard >>=
+            \clip -> print $ buildCommand (Option "l" (Just clip) : defaultOptions) (parseList options))
