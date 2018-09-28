@@ -6,8 +6,6 @@ charWords :: Char -> String -> [String]
 charWords _ [] = []
 charWords c xs = split (dropFinalBlank . dropInitBlank . keepDelimsL  $ oneOf [c]) xs
 
-teststring = "-s ---d    descrizione del link   -D mtg  -rm"
-
 firstWhiteSpace :: String -> [String]
 firstWhiteSpace [] = []
 firstWhiteSpace st = [takeWhile (/= ' ') st, dropWhile (/= ' ') st]
