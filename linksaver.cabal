@@ -26,7 +26,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib, Command, Fill, CustomWords, Builder
+      Lib, Command, Fill, CustomWords, Builder, Link
   other-modules:
       Paths_linksaver
   hs-source-dirs:

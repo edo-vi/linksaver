@@ -77,11 +77,21 @@ existsOption s c = cleans `elem` optArr
                    where cleans = cleanOption s
                          optArr = map option c
 
+-- | Same as existsOption, but with a Command instead of [Option]
+existsInCommand :: String -> Command -> Bool
+existsInCommand s (Command c) = existsOption s c
+
 -- | Given a string and an array of Options returns an Option whose 
 -- identifier matches the input string. It can fail, returning Nothing.
 getOption :: String -> [Option] -> Maybe Option
 getOption [] _ = Nothing
+getOption _ [] = Nothing
 getOption s c 
   | existsOption s c = Just $ head (filter (\x -> option x == cleans) c)
   | otherwise                = Nothing 
   where cleans = cleanOption s
+
+-- | Same as getOption, but with a Command instead of [Option]
+getFromCommand :: String -> Command -> Maybe Option
+getFromCommand [] _ = Nothing
+getFromCommand s (Command c) = getOption s c
