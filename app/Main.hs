@@ -23,23 +23,24 @@ main :: IO ()
 main = do
     options <- getArgs -- IO [string] containing the options
     clip <- getClipboard
+    com <- return $ buildCommand (Option "l" (Just clip) : defaultOptions) (parseList options)
     conn <- connect $ ConnectInfo "localhost" 5432 "postgres" "" "mtg" 
     i <- query_ conn "select * from creatures" -- [Link]
-    -- print $ buildCommand (Option "l" (Just clip) : defaultOptions) (parseList options)
     printLinks $ (i :: [Link])
 
 printLinks :: [Link] -> IO ()
 printLinks [] = return ()
-printLinks (x:xs) = putStr ("id:   ") >> print(_id x)
-                    >> putStr ("link: ") >> putStrLn (link x) 
-                       >> putStr ("desc: ") >> putStrLn (description x)
-                          >> putStrLn (" ") >> printLinks xs
+printLinks (x:xs) = putStr ("│  id    │ ") 
+                    >> print(_id x) >> putStr ("│  link  │ ")
+                       >> putStrLn (link x) >> putStr ("│  desc  │ ") 
+                          >> putStrLn (description x) >> putStrLn("├────────────────────────────────────────")
+                             >> printLinks xs
 
 data Link = Link {
     _id :: Integer,
     link :: [Char],
     description :: [Char]
-} deriving (Eq, Show)
+} deriving (Eq)
 
 instance FromRow Link where
     fromRow = Link <$> field <*> field <*> field
