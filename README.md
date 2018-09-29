@@ -34,3 +34,11 @@ Example:
 linksaver -s -d Descripion of the link
 ```
 will save the data in your clipboard as the link, and "Description of the link" as the desription.
+
+### Remove data
+To remove a link you need to pass the program the *-rm* flag, alongside with *-id \<id of link\>*
+Example
+```
+linksaver -rm -id 27
+```
+will remove the row with an id of 27.
