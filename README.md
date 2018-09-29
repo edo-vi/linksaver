@@ -2,7 +2,7 @@
 
 CLI for saving links (but also any other string of text) with a description in a local **PostgreSQL** database.
 
-Written in **Haskell**; current version: **0.2.0**
+Written in **Haskell**; current version: **0.3.0**
 
 ## Usage
 ### Build
