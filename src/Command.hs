@@ -47,7 +47,7 @@ newtype Command = Command [Option] deriving (Eq, Show)
 -- | List of all valid options identifiers.
 -- /D/: database, /t/ : table, /u/: user, /l/: link, /rm/: remove, /s/: save, /r/:read
 validOptions :: [String]
-validOptions = ["d", "D", "u", "rm", "l", "t", "s", "r"]
+validOptions = ["d", "D", "u", "rm", "l", "t", "s", "r", "id"]
 
 -- | Returns True if the option identifier is valid; 
 isValidOption :: Option -> Bool
