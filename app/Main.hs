@@ -24,7 +24,7 @@ main = do
                   False -> case existsInCommand "rm" com of
                                 True -> removeLinks conn com
                                 False -> fetchLinks conn -- then we imply -r
-        _ -> print ("You can only input one option between -r, -s, and -rm") 
+        _ -> print ("You can use only one option between -r, -s, and -rm") 
              >> return ()
 
 
@@ -47,10 +47,11 @@ fetchLinks conn = do
 
 removeLinks :: Connection -> Command -> IO()
 removeLinks conn com = let _id = (read . fromJust . value . fromJust $ getFromCommand "id" com ) :: Integer
-                        in
-                        execute conn "delete from creatures where id=?" (Only _id) >>
-                        print ("Deleted link with id " ++ show _id)
-
+                        in do
+                            rows <- query conn "select * from creatures where id=?" [_id :: Integer]
+                            if length (rows :: [Link]) /= 0 
+                                then (execute conn "delete from creatures where id=?" [_id :: Integer]) >> printDeleted (head rows)
+                                else print ("Couldn't delete link with id " ++ show _id)
 
 checkNumMainOptions :: Command -> Int
 checkNumMainOptions (Command o) = length . filter (`elem` ["r","s","rm"]) . map option $ o 

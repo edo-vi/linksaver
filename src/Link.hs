@@ -12,6 +12,10 @@ printLinks (x:xs) = putStr ("│  id    │ ")
                           >> putStrLn (description x) >> putStrLn("├────────────────────────────────────────")
                              >> printLinks xs
 
+
+printDeleted :: Link -> IO ()
+printDeleted link = putStrLn ("Deleted following link: \nid   │" ++ show (_id link)) >> putStrLn ("desc │" ++ description link)
+
 data Link = Link {
     _id :: Integer,
     link :: [Char],

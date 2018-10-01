@@ -2,13 +2,13 @@ module Fill where
 import Command
 
 defaultDatabase :: Option
-defaultDatabase = Option "D" $ Just undefined -- TODO add default database
+defaultDatabase = Option "D" $ Just "mtg" -- TODO add default database
 
 defaultTable :: Option
-defaultTable = Option "t" $ Just undefined -- TODO add default table name
+defaultTable = Option "t" $ Just "creatures" -- TODO add default table name
 
 defaultUsername :: Option
-defaultUsername = Option "u" $ Just undefined -- TODO add default username
+defaultUsername = Option "u" $ Just "postgres" -- TODO add default username
 
 defaultOptions :: [Option]
 defaultOptions = [defaultDatabase, defaultUsername, defaultTable]
