@@ -1,4 +1,4 @@
-# linksaver
+# stringsaver
 
 CLI for saving notes and strings with a description in a local **PostgreSQL** database.
 
@@ -15,16 +15,16 @@ in the terminal: this will create an executable called *linksaver-exe* in .stack
 
 ### Fetching and saving data
 The program needs you to have a running instance of PostgreSQL database in your machine, which will connect to when executed. The default username, database and table must be defined in *Fill.hs*: if you don't set these variables to your desired defaults, you will need to pass *-u* (username), *-D* (database), *-t* (table) as arguments to the program. 
-Your table must have three columns: the primary key column and two Text columns, which will represent the link and the description respectively.  
+Your table must have three columns: the primary key column and two Text columns, which will represent the string and the description respectively.  
 
 #### Fetch data
 To fetch the data, run
 ```
-linksaver -r -D database -u user -t table
+stringsaver -r -D database -u user -t table
 ```
 *-r* (read) is the default option so you can ommit it; if you have defined your default variables, then this command
 ``` 
-linksaver 
+stringsaver 
 ```
 is equivalent to that above.
 
@@ -33,15 +33,15 @@ To save a link you need to use the *-s* (save) option, with an optional *-d* (de
 
 Example:
 ```
-linksaver -s -d Descripion of the link
+stringsaver -s -d Descripion of the link
 ```
 will save the data in your clipboard as the link and "Description of the link" as its description.
 
 ### Remove data
-To remove a link you need to pass the program the *-rm* flag, alongside with *-id \<id of link\>*
+To remove an entry you need to pass the program the *-rm* flag, alongside with *-id \<id of link\>*
 
 Example
 ```
-linksaver -rm -id 27
+stringsaver -rm -id 27
 ```
 will remove the row with an id of 27.
