@@ -1,6 +1,6 @@
 # linksaver
 
-CLI for saving links (but also any other string of text) with a description in a local **PostgreSQL** database.
+CLI for saving notes and strings with a description in a local **PostgreSQL** database.
 
 Written in **Haskell**; current version: **0.3.0**
 
